@@ -3,8 +3,19 @@
 var list = document.getElementById("to-do-list");
 var item = "";
 var message = "error: unknown";
+var toDelete = false;
+var taskToRemove = "";
 
-//      Add/Create logic
+//debugging tools////////////////////
+function confirmWorks(){
+  toDelete=true;
+  alert("hey, this works to call a function" + toDelete);
+  taskToRemove = this.;
+  console.log(taskToRemove);
+}
+/////////////////////////////////////
+
+//      Add/Create logic/////////////////////////////////////////////////////
 function removeUserInput() {
   //getting rid of user inputs
   var garbo = document.querySelector("form");
@@ -17,20 +28,24 @@ function addItem(value) {
   var listItem = document.createElement("span");
   var bubble = document.createElement("span");
 
-  //adding classed to new items
+  //adding classes to new items
   listItem.classList.add("task"); //HAHAHAHAHAHAHAH
   bubble.classList.add("bubble");
   taskSection.classList.add("userTask");
 
+  //adding these spans to the new div tag [taskSecton]
   taskSection.appendChild(bubble);
   taskSection.appendChild(listItem);
 
   list.appendChild(taskSection);
 
-  //need to determine 
+  //adding inner text to new elements
   listItem.innerText = value;
   bubble.innerText="O";
+  //adding CSS and attributes to the bubble element
   bubble.style.visibility="hidden";
+  var attr = bubble.attributes; //find out what this list is
+  bubble.setAttribute("onclick","confirmWorks()");
 }
 
 function askUserInput() {
@@ -54,7 +69,7 @@ function checkValue(value) {
   item = value;
 }
 
-//      Delete logic -- we want to check if there are any elements to delete, then delete
+//      Delete logic -- we want to check if there are any elements to delete, then delete//////////////////////////////////////
 
 var instruction = document.getElementById("interaction");
 
@@ -75,13 +90,14 @@ function helperText() {
 function determineTaskToDelete() {
   //then figure out what task to delete
   helperText();
+  var tasks = document.querySelectorAll(".userTask");
   
 }
 
 function isThereTasks() {
   var test = list.children;
   if (test.length <= 2) {
-    message = "no task here";
+    message = "no task here to delete";
   } else {
     determineTaskToDelete();
   }
