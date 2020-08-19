@@ -5,3 +5,14 @@
 #calender{
     border: 5px solid red;
 }
+
+.task{
+    background-color: lightblue;
+    margin:0;
+    padding:0;
+}
+
+.bubble{
+    font-size: 14px;
+    font-weight: bold;
+}
