@@ -3,15 +3,10 @@
 var list = document.getElementById("to-do-list");
 var item = "";
 var message = "error: unknown";
-var toDelete = false;
-var taskToRemove = "";
 
 //debugging tools////////////////////
-function confirmWorks(){
-  toDelete=true;
-  alert("hey, this works to call a function" + toDelete);
-  taskToRemove = this.;
-  console.log(taskToRemove);
+function confirmWorks() {
+  alert("hey, this works to call a function");
 }
 /////////////////////////////////////
 
@@ -24,7 +19,7 @@ function removeUserInput() {
 
 function addItem(value) {
   //adding item
-  var taskSection = document.createElement('div');
+  var taskSection = document.createElement("div");
   var listItem = document.createElement("span");
   var bubble = document.createElement("span");
 
@@ -41,11 +36,9 @@ function addItem(value) {
 
   //adding inner text to new elements
   listItem.innerText = value;
-  bubble.innerText="O";
+  bubble.innerText = "O";
   //adding CSS and attributes to the bubble element
-  bubble.style.visibility="hidden";
-  var attr = bubble.attributes; //find out what this list is
-  bubble.setAttribute("onclick","confirmWorks()");
+  bubble.style.visibility = "hidden";
 }
 
 function askUserInput() {
@@ -80,24 +73,37 @@ function helperText() {
   helpText.innerText =
     "Hello! Please click on the value you want to get rid of.";
 
-    //all tasks will have the "bubbles" appear
-    var tasks = document.querySelectorAll(".bubble");
-    tasks.forEach(element => {
-        element.style.visibility="visible";
-    });
+  //all tasks will have the "bubbles" appear
+  var tasks = document.querySelectorAll(".bubble");
+  tasks.forEach((element) => {
+    element.style.visibility = "visible";
+  });
+}
+
+function removeTask(task) {
+  var parent = task.parentElement;
+  task.remove();
+  instruction.lastChild.remove();
 }
 
 function determineTaskToDelete() {
   //then figure out what task to delete
   helperText();
   var tasks = document.querySelectorAll(".userTask");
-  
+  tasks.forEach((element) => {
+    element.onclick = function () {
+      var task = element.children;
+      task[0].innerText = "X";
+      alert("deleted task: " + task[1].innerText);
+      removeTask(element);
+    };
+  });
 }
 
 function isThereTasks() {
   var test = list.children;
   if (test.length <= 2) {
-    message = "no task here to delete";
+    alert("no task here to delete");
   } else {
     determineTaskToDelete();
   }
@@ -105,14 +111,78 @@ function isThereTasks() {
 
 function deleteItem() {
   isThereTasks();
-  //alert(message);
 }
 
-//      Complete task logic
-function checkTask() {
+//      Complete task logic //////////////////////////////////
+var completeBtn = document.getElementById("checkmark");
+
+function noHelperText(){
+  var helpText = document.querySelector(".user-check");
+  helpText.remove();
+}
+
+function checkTask(elements) {
   //when user completes a task they can toggle it here
+  elements[0].innerText = "/";
+  var task = elements[1].innerText;
+  elements[1].innerText = task + "--done";
 }
 
-function unCheckTask() {
+function unCheckTask(elements) {
   //when use unchecks their task
+  elements[0].innerText = "O";
+  var task = elements[1].innerText;
+  var wordList = task.split("--done");
+  elements[1].innerText = wordList[0];
 }
+
+function helperText2() {
+  var helpText = document.createElement("p");
+  helpText.style = "background-color:lightgreen;";
+  instruction.appendChild(helpText);
+  helpText.classList.add("user-check");
+  helpText.innerText =
+    "Hello! Please click on the task you want to check/uncheck.";
+
+  //all tasks will have the "bubbles" appear
+  var tasks = document.querySelectorAll(".bubble");
+  tasks.forEach((element) => {
+    element.style.visibility = "visible";
+  });
+}
+
+function determineTaskIsComplete(selection) {
+  var elements = selection.children;
+  console.log(elements);
+  if (elements[0].innerText == "/") {
+    unCheckTask(elements);
+    noHelperText();
+  } else {
+    checkTask(elements);
+    noHelperText();
+  };
+}
+
+function userSelects() {
+  var taskList = document.querySelectorAll(".userTask");
+  taskList.forEach((element) => {
+    element.onclick = function () {
+      determineTaskIsComplete(element);
+    };
+  });
+}
+function isThereTasks2() {
+  var test = list.children;
+  if (test.length <= 2) {
+    alert("no tasks here!");
+  } else {
+    helperText2();
+    userSelects();
+  }
+}
+
+function completeItem() {
+  isThereTasks2();
+}
+
+/////////////////////////////////////////////////////////////////
